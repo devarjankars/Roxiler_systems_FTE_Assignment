@@ -54,7 +54,7 @@ const AdminDashboard = () => {
   const handleAddUser = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    await axios.post(`${BaseURL}/api/stores/add-user`, newUser, {
+    await axios.post(`${BaseURL}/api/admin/add-user`, newUser, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setNewUser({ name: '', email: '', address: '', password: '', role: 'user' });

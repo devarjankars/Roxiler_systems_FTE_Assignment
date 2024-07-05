@@ -36,9 +36,18 @@ const Signup = ({ history }) => {
     
     if(validatePassword(password) ){
         if(validateEmail(email)){
+          if(name.length>=19 && name.length<=59){
+            if(address.length <400){
             let ans= await signup(name, email, address, password);
              console.log(ans);
-            navigate('/');
+            navigate('/');}
+            else {
+              toast.error("The Address length should be 400 characters max")
+            }
+          }
+          else{
+            toast.error("name length should be 60 characters max and 20 characters min")
+          }
         }
         else {
             toast.error("Email is Invalid")

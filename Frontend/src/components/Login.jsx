@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { login,logout } = useContext(AuthContext);
-  logout;
+  
 const Navigate= useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +13,10 @@ const Navigate= useNavigate();
     e.preventDefault();
    let res= await login(email, password);
    console.log(res);
+   if(res===false){
+    Navigate('/')
+    return;
+   }
    Navigate(`/${res}`)
 
   };
