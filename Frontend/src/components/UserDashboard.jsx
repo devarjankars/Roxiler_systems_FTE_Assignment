@@ -59,9 +59,9 @@ const UserDashboard = () => {
                     {store.ratings.find(r => r.user === user._id)?.rating || 'N/A'}
                   </td>
                   <td className="border px-4 py-2">
-                    <input
+                  <input
                       type="number"
-                      value={rating}
+                      value={ store.rating?store.rating: rating}
                       onChange={(e) => setRating(Number(e.target.value))}
                       className="w-full p-2 border border-gray-300 rounded mb-4"
                     />
