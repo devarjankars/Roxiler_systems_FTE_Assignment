@@ -45,3 +45,6 @@ This is a MERN stack web application that allows users to submit ratings for reg
 #### frontend 
 vite bundler  and npm i
 
+
+#### error handling 
+we have used toast for error handling 
