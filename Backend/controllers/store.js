@@ -1,9 +1,14 @@
 const Store = require('../models/Store');
+const User= require('../models/User');
 
 exports.addStore = async (req, res) => {
   const { name, email, address } = req.body;
+
   try {
-    const store = new Store({ name, email, address, owner: req.user.userId });
+    const ownerData= await User.findOne({email});
+   let id=ownerData._id;
+   console.log(ownerData,id);
+    const store = new Store({ name, email, address, owner: id});
     await store.save();
     res.status(201).json({ message: 'Store added successfully' });
   } catch (err) {

@@ -70,7 +70,7 @@ const UserDashboard = () => {
             </tbody>
           </table>
         </div>
-        <button onClick={ ()=>{logout(); navigate('/login');}} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
+        <button onClick={ ()=>{logout(); navigate('/');}} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
       </div>
     </div>
   );

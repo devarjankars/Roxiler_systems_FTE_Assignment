@@ -3,9 +3,11 @@ import axios from 'axios';
 import { BaseURL } from '../utils/URL';
 import { toast } from 'react-toastify';
 
+
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+ 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -23,9 +25,19 @@ export const AuthContextProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const response = await axios.post(`${BaseURL}/api/auth/login`, { email, password });
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
-    return true;
+     if((response.data.user)){
+      localStorage.setItem('token', response.data.token);
+      setUser(response.data.user);
+         console.log(user);
+        return user.role;
+      
+     }
+    if(response.data?.error){
+      toast.error(`${response.data?.error}`)
+      return false;
+    }
+   
+
   };
 
   const signup = async (name, email, address, password) => {

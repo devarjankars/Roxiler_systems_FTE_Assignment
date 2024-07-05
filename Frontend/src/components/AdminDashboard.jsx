@@ -1,18 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { BaseURL } from '../utils/URL';
+
 const AdminDashboard = () => {
-  const { user, logout } = useContext(AuthContext);
-  const [dashboardData, setDashboardData] = useState({});
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [dashboardData, setDashboardData] = useState({ totalUsers: 0, totalStores: 0, totalRatings: 0 });
   const [newUser, setNewUser] = useState({ name: '', email: '', address: '', password: '', role: 'user' });
+  const [newStore, setNewStore] = useState({ name: '', email: '', address: '' });
   const [users, setUsers] = useState([]);
   const [stores, setStores] = useState([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${BaseURL}/api/dashboard`, {
+      const response = await axios.get(`${BaseURL}/api/admin/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDashboardData(response.data);
@@ -20,7 +24,7 @@ const AdminDashboard = () => {
 
     const fetchUsers = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${BaseURL}/api/api/admin/users`, {
+      const response = await axios.get(`${BaseURL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -43,17 +47,34 @@ const AdminDashboard = () => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
+  const handleStoreChange = (e) => {
+    setNewStore({ ...newStore, [e.target.name]: e.target.value });
+  };
+
   const handleAddUser = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    await axios.post(`${BaseURL}/api/admin/add-user`, newUser, {
+    await axios.post(`${BaseURL}/api/stores/add-user`, newUser, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setNewUser({ name: '', email: '', address: '', password: '', role: 'user' });
-    const response = await axios.get(`${BaseURL}/api/users`, {
+    const response = await axios.get(`${BaseURL}/api/admin/users`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setUsers(response.data);
+  };
+
+  const handleAddStore = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    await axios.post(`${BaseURL}/api/stores/add-store`, newStore, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setNewStore({ name: '', email: '', address: '' });
+    const response = await axios.get(`${BaseURL}/api/stores`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setStores(response.data);
   };
 
   return (
@@ -110,30 +131,60 @@ const AdminDashboard = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
             >
               <option value="user">Normal User</option>
-              <option value="storeOwner">Store Owner</option>
               <option value="admin">Admin</option>
+              <option value="storeOwner">Store Owner</option>
             </select>
             <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">Add User</button>
           </form>
         </div>
         <div className="mb-4 p-4 bg-white rounded shadow-md">
+          <h2 className="text-xl font-semibold mb-2">Add Store</h2>
+          <form onSubmit={handleAddStore}>
+            <input
+              type="text"
+              name="name"
+              value={newStore.name}
+              onChange={handleStoreChange}
+              placeholder="Store Name"
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+            />
+            <input
+              type="email"
+              name="email"
+              value={newStore.email}
+              onChange={handleStoreChange}
+              placeholder="Store Email"
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+            />
+            <input
+              type="text"
+              name="address"
+              value={newStore.address}
+              onChange={handleStoreChange}
+              placeholder="Store Address"
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+            />
+            <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">Add Store</button>
+          </form>
+        </div>
+        <div className="mb-4 p-4 bg-white rounded shadow-md">
           <h2 className="text-xl font-semibold mb-2">Users</h2>
-          <table className="w-full table-auto">
+          <table className="w-full">
             <thead>
               <tr>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Address</th>
-                <th className="px-4 py-2">Role</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Role</th>
               </tr>
             </thead>
             <tbody>
-              {users.map(user => (
+              {users.map((user) => (
                 <tr key={user._id}>
-                  <td className="border px-4 py-2">{user.name}</td>
-                  <td className="border px-4 py-2">{user.email}</td>
-                  <td className="border px-4 py-2">{user.address}</td>
-                  <td className="border px-4 py-2">{user.role}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.address}</td>
+                  <td>{user.role}</td>
                 </tr>
               ))}
             </tbody>
@@ -141,28 +192,28 @@ const AdminDashboard = () => {
         </div>
         <div className="mb-4 p-4 bg-white rounded shadow-md">
           <h2 className="text-xl font-semibold mb-2">Stores</h2>
-          <table className="w-full table-auto">
+          <table className="w-full">
             <thead>
               <tr>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Address</th>
-                <th className="px-4 py-2">Rating</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Rating</th>
               </tr>
             </thead>
             <tbody>
-              {stores.map(store => (
+              {stores.map((store) => (
                 <tr key={store._id}>
-                  <td className="border px-4 py-2">{store.name}</td>
-                  <td className="border px-4 py-2">{store.email}</td>
-                  <td className="border px-4 py-2">{store.address}</td>
-                  <td className="border px-4 py-2">{store.rating}</td>
+                  <td>{store.name}</td>
+                  <td>{store.email}</td>
+                  <td>{store.address}</td>
+                  <td>{store.rating}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <button onClick={ ()=>{logout(); navigate('/login') }} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
+        <button onClick={() => { logout(); navigate('/'); }} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
       </div>
     </div>
   );

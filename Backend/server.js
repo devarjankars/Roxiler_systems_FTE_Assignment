@@ -7,7 +7,7 @@ const bodyParser=require('body-parser')
 
 const AuthRoutes= require('./routes/AuthRoute')
 const UserRoutes= require('./routes/UserRoute')
-// const StoreRotutes= require('./routes/StoreRoutes');
+const StoreRotutes= require('./routes/StoreRoute');
 const AdminRoute= require('./routes/AdminRoute')
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -19,7 +19,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth',AuthRoutes)
 app.use('/api/users', UserRoutes);
-// app.use('/api/stores', StoreRotutes);
+app.use('/api/stores', StoreRotutes);
 app.use('/api/admin', AdminRoute)
 
 

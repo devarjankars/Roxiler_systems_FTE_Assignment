@@ -1,11 +1,13 @@
-import React, { useEffect, useContext } from 'react';
+import React  from 'react';
 import { BrowserRouter as Router, Route, Routes ,Navigate} from 'react-router-dom';
 import {  AuthContext } from './context/AuthContext';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-
+import UserDashboard from './components/UserDashboard';
+import AdminDashboard from './components/AdminDashboard';
+import StoreOwnerDashboard from './components/StoreOwnerDashboard';
 
 const App = () => {
 
@@ -21,15 +23,15 @@ const App = () => {
           <Route path="/signup" element={<Signup/>} />
           <Route
           path="/admin"
-          element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/" />}
         />
         <Route
           path="/user"
-          element={user?.role === 'user' ? <UserDashboard /> : <Navigate to="/login" />}
+          element={user?.role === 'user' ? <UserDashboard /> : <Navigate to="/" />}
         />
         <Route
-          path="/store-owner"
-          element={user?.role === 'storeOwner' ? <StoreOwnerDashboard /> : <Navigate to="/login" />}
+          path="/storeOwner"
+          element={user?.role === 'storeOwner' ? <StoreOwnerDashboard /> : <Navigate to="/" />}
         />
          
         </Routes>

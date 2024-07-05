@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res) => {
-    console.log("hello backend ", req.body);
+   
   const { name, email, password, address } = req.body;
        if( !name || !email|| !password|| !address){
         return res.status(400).
@@ -27,19 +27,25 @@ exports.signup = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+    
   const { email, password } = req.body;
   if( !email|| !password){
-    return res.status(400).
+    return res.
     json({ error: "Please check credential",
            status:false
     });
 }
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user){ 
+        return res.json({ error: 'Invalid Username'  });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+    if (!isMatch){ 
+        return res.json({ error: 'Invalid Password' });
+    }
 
     const token = jwt.sign({ userId: user._id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
     res.json({ token, user });

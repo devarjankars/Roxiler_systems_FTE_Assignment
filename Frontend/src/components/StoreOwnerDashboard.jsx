@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { BaseURL } from '../utils/URL';
+
 const StoreOwnerDashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [store, setStore] = useState(null);
@@ -33,7 +34,7 @@ const StoreOwnerDashboard = () => {
             </div>
           </div>
         )}
-        <button onClick={()=>{ logout(); navigate('/login');}} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
+        <button onClick={()=>{ logout(); navigate('/');}} className="w-full p-2 bg-red-500 text-white rounded">Logout</button>
       </div>
     </div>
   );

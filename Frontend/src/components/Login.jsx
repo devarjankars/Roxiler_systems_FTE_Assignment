@@ -3,15 +3,18 @@ import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { login,logout } = useContext(AuthContext);
+  logout;
 const Navigate= useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    Navigate('/');
+   let res= await login(email, password);
+   console.log(res);
+   Navigate(`/${res}`)
+
   };
 
   return (
