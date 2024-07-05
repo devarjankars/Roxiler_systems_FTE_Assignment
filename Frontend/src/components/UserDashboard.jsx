@@ -2,8 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { BaseURL } from '../utils/URL';
+import { useNavigate } from 'react-router-dom';
 
 const UserDashboard = () => {
+  const navigate= useNavigate();
   const { user, logout } = useContext(AuthContext);
   const [stores, setStores] = useState([]);
   const [rating, setRating] = useState(0);
